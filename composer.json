@@ -1,0 +1,43 @@
+{
+    "name": "lswl/laravel-api",
+    "description": "Laravel restful api.",
+    "keywords": [
+        "lswl",
+        "laravel",
+        "api",
+        "restful"
+    ],
+    "homepage": "https://linshaowl.com/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "linshaowl",
+            "email": "linshaowl@163.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Lswl\\Api\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.3|^8.0",
+        "ext-mbstring": "*",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "lswl/sign": "^1.0",
+        "lswl/laravel-api-lang": "^1.0",
+        "lswl/laravel-support": "^8.0",
+        "lswl/laravel-log": "^8.0",
+        "lswl/laravel-database": "^8.0",
+        "jenssegers/agent": "^2.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Lswl\\Api\\Providers\\LswlApiServiceProvider",
+                "Lswl\\Api\\Providers\\LswlContractServiceProvider"
+            ]
+        }
+    }
+}
