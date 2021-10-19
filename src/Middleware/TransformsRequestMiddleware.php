@@ -11,6 +11,7 @@ namespace Lswl\Api\Middleware;
 
 use Illuminate\Foundation\Http\Middleware\TransformsRequest as BaseTransformsRequest;
 use Lswl\Api\Contracts\RequestParamsInterface;
+use Lswl\Support\Utils\Collection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
@@ -20,8 +21,11 @@ class TransformsRequestMiddleware extends BaseTransformsRequest
 {
     protected function clean($request)
     {
-        $this->cleanParameterBag(
-            new ParameterBag(app()->get(RequestParamsInterface::class)->toArray())
-        );
+        // 参数
+        $parameter = new ParameterBag(app()->get(RequestParamsInterface::class)->toArray());
+        $this->cleanParameterBag($parameter);
+
+        // 请求参数
+        app()->instance(RequestParamsInterface::class, new Collection($parameter));
     }
 }
