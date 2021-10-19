@@ -9,24 +9,12 @@
 
 namespace Lswl\Api\Traits;
 
-use Lswl\Api\Utils\ParseService;
-use Throwable;
-
 /**
  * 资源控制器方法
  */
 trait ResourceControllerTrait
 {
-    protected $service;
-
-    protected function initialize()
-    {
-        try {
-            parent::initialize();
-        } catch (Throwable $e) {
-        }
-        $this->withService();
-    }
+    use ControllerWithServiceTrait;
 
     public function index()
     {
@@ -63,16 +51,5 @@ trait ResourceControllerTrait
         }
 
         return $this->service->destroy();
-    }
-
-    /**
-     * 添加 service 属性
-     * @return $this
-     */
-    private function withService()
-    {
-        $this->service = ParseService::run($this->service, get_called_class(), 'controller');
-
-        return $this;
     }
 }
