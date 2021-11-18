@@ -31,6 +31,7 @@ trait ResourceServiceTrait
     use BuilderAssembleTrait;
     use ResourceServiceHooksTrait;
     use ResourceServicePageTrait;
+    use ResourceServiceQueryFilterTrait;
 
     /**
      * 模型
@@ -103,6 +104,9 @@ trait ResourceServiceTrait
 
         // 前置操作
         $this->indexBefore();
+
+        // 查询过滤
+        $this->indexQueryFilter();
 
         // 处理
         $this->indexHandler();
@@ -219,10 +223,13 @@ trait ResourceServiceTrait
      */
     protected function showHandler()
     {
+        // 获取连表查询合格的列
+        $columns = $this->query->getModel()->getQualifiedColumns($this->showColumns);
+
         // 默认通过主键查询
         $this->showQueryResult = $this->query
-            ->where($this->query->getModel()->getKeyName(), $this->params->id)
-            ->firstOr($this->showColumns, function () {
+            ->where($this->getQualifiedPrimaryKey(), $this->params->id)
+            ->firstOr($columns, function () {
                 $this->noData();
             });
     }
@@ -248,7 +255,7 @@ trait ResourceServiceTrait
             ->create($data);
 
         // 当前这条数据id
-        $this->params->id = $model->id;
+        $this->params->id = $model->{$model->getKeyName()};
     }
 
     /**
@@ -281,7 +288,7 @@ trait ResourceServiceTrait
         }
 
         // 查询
-        $primaryKey = $this->query->getModel()->getKeyName();
+        $primaryKey = $this->getQualifiedPrimaryKey();
         $info = $this->query
             ->where($primaryKey, $this->params->id)
             ->firstOr([$primaryKey], function () {
@@ -306,8 +313,11 @@ trait ResourceServiceTrait
 
         // 删除
         $this->query
-            ->whereIn($this->query->getModel()->getKeyName(), $ids)
-            ->delete();
+            ->whereIn($this->getQualifiedPrimaryKey(), $ids)
+            ->get()
+            ->map(function (Model $model) {
+                $model->delete();
+            });
     }
 
     /**
@@ -319,6 +329,9 @@ trait ResourceServiceTrait
      */
     protected function indexQuery(Builder $builder, array $params, array $columns)
     {
+        // 获取连表查询合格的列
+        $columns = $this->query->getModel()->getQualifiedColumns($columns);
+
         // 最大数量
         $maxNum = config('lswl-api.max_query_num', 1000);
         // 修改参数
@@ -402,12 +415,23 @@ trait ResourceServiceTrait
      */
     protected function getNewQuery(): Builder
     {
+        // 模型
         $model = ParseModel::run($this->model, get_called_class(), 'service');
         if (!($model instanceof Model)) {
             $this->error(lswl_api_lang_messages_trans('model_no_exist'));
         }
 
         return $model->newQuery();
+    }
+
+    /**
+     * 获取连表查询合格的主键
+     */
+    protected function getQualifiedPrimaryKey()
+    {
+        $model = $this->query->getModel();
+
+        return $model->getQualifiedColumn($model->getKeyName());
     }
 
     /**
@@ -427,7 +451,13 @@ trait ResourceServiceTrait
     {
         $res = $columns;
 
-        if (in_array('*', $columns)) {
+        if (in_array('*', $columns, true)) {
+            // 使用模型的填充字段
+            $res = $this->query->getModel()->getFillable();
+        }
+
+        if (empty($res) || in_array('*', $res, true)) {
+            // 查询数据表字段
             $res = array_column(
                 DBHelper::getInstance()->getAllColumns($this->query->getModel()->getTable()),
                 'column_name'
