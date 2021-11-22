@@ -26,7 +26,6 @@
         "ext-json": "*",
         "ext-openssl": "*",
         "lswl/sign": "^1.0",
-        "lswl/laravel-api-lang": "^1.0",
         "lswl/laravel-support": "^8.0",
         "lswl/laravel-log": "^8.0",
         "lswl/laravel-database": "^8.0",

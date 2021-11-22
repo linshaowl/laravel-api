@@ -92,7 +92,7 @@ class CheckTokenMiddleware
 
         // 判断token是否存在
         if (empty($token)) {
-            $this->error(lswl_api_lang_messages_trans('token_no_exist'), ResultCodeInterface::TOKEN_NO_EXISTS);
+            $this->error(trans('token_no_exist'), ResultCodeInterface::TOKEN_NO_EXISTS);
         }
 
         // 解析token
@@ -107,10 +107,10 @@ class CheckTokenMiddleware
         // 判断token是否有效
         $info = $this->getUserInfo($id);
         if (empty($info)) {
-            $this->error(lswl_api_lang_messages_trans('token_invalid'), ResultCodeInterface::TOKEN_INVALID);
+            $this->error(trans('token_invalid'), ResultCodeInterface::TOKEN_INVALID);
         } elseif ($info->is_freeze == ConstAttributeInterface::YES) {
             // 是否冻结
-            $this->error(lswl_api_lang_messages_trans('prohibit_login'), ResultCodeInterface::PROHIBIT_LOGIN);
+            $this->error(trans('prohibit_login'), ResultCodeInterface::PROHIBIT_LOGIN);
         }
 
         // 判断是否刷新token
@@ -136,7 +136,7 @@ class CheckTokenMiddleware
         }
 
         // 默认值
-        $verify = [ResultCodeInterface::TOKEN_INVALID, lswl_api_lang_messages_trans('token_invalid')];
+        $verify = [ResultCodeInterface::TOKEN_INVALID, trans('token_invalid')];
 
         // 多场景验证
         foreach ($this->scenes as $scene) {

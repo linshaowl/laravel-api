@@ -50,10 +50,16 @@ class LswlApiServiceProvider extends ServiceProvider
      */
     protected $apiDatabaseMigrationsDir;
 
+    /**
+     * @var string
+     */
+    protected $apiResourcesLangDir;
+
     public function boot()
     {
         $this->apiConfigPath = __DIR__ . '/../../config/lswl-api.php';
         $this->apiDatabaseMigrationsDir = __DIR__ . '/../../database/migrations';
+        $this->apiResourcesLangDir = __DIR__ . '/../../resources/lang';
 
         // 注册路由中间件
         $this->registerRouteMiddleware();
@@ -63,6 +69,9 @@ class LswlApiServiceProvider extends ServiceProvider
 
         // 发布文件
         $this->publishFiles();
+
+        // 合并语言文件
+        $this->mergeLang();
     }
 
     /**
@@ -117,5 +126,13 @@ class LswlApiServiceProvider extends ServiceProvider
             ],
             'lswl-api'
         );
+    }
+
+    /**
+     * 合并语言文件
+     */
+    protected function mergeLang()
+    {
+        $this->loadJsonTranslationsFrom($this->apiResourcesLangDir);
     }
 }

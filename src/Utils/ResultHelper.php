@@ -27,7 +27,7 @@ class ResultHelper
      */
     public static function success($data = null, string $msg = '', int $code = ResultCodeInterface::SUCCESS)
     {
-        $msg = !empty($msg) ? $msg : lswl_api_lang_messages_trans('success');
+        $msg = !empty($msg) ? $msg : trans('success');
         return static::abort($code, $msg, $data);
     }
 
@@ -55,7 +55,7 @@ class ResultHelper
      */
     public static function noData(string $msg = '')
     {
-        $msg = !empty($msg) ? $msg : lswl_api_lang_messages_trans('no_data');
+        $msg = !empty($msg) ? $msg : trans('no_data');
         return static::abort(ResultCodeInterface::NO_DATA, $msg, null);
     }
 

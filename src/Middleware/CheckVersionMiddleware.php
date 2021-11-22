@@ -30,14 +30,14 @@ class CheckVersionMiddleware
 
         // 判断版本号是否存在
         if (empty($version)) {
-            $this->error(lswl_api_lang_messages_trans('version_no_exist'));
+            $this->error(trans('version_no_exist'));
         }
 
         // 验证版本
         $info = $this->getVersionLastInfo();
         if (!empty($info)) {
             if ($version < $info->code && $info->is_force) {
-                $this->error(lswl_api_lang_messages_trans('old_version'), ResultCodeInterface::OLD_VERSION, [
+                $this->error(trans('old_version'), ResultCodeInterface::OLD_VERSION, [
                     'content' => $info->content,
                     'url' => $info->url,
                 ]);

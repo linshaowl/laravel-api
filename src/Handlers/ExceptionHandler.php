@@ -190,7 +190,7 @@ class ExceptionHandler extends Handler
     private function resetProperty()
     {
         $this->code = ResultCodeInterface::ERROR;
-        $this->msg = lswl_api_lang_messages_trans('error');
+        $this->msg = trans('error');
         $this->data = null;
         $this->httpCode = ResultCodeInterface::HTTP_ERROR_CODE;
         $this->key = $this->buildKey();
@@ -220,17 +220,17 @@ class ExceptionHandler extends Handler
             // 系统维护中
             if ($e->getStatusCode() == 503 && $e->getMessage() == 'Service Unavailable') {
                 $this->code = ResultCodeInterface::MAINTENANCE;
-                $this->msg = lswl_api_lang_messages_trans('maintenance');
+                $this->msg = trans('maintenance');
                 return;
             }
 
             // 请求异常
             $this->code = ResultCodeInterface::ERROR;
-            $this->msg = lswl_api_lang_messages_trans('invalid_request');
+            $this->msg = trans('invalid_request');
         } elseif ($e instanceof QueryException) {
             // 数据库异常
             $this->code = ResultCodeInterface::SYS_EXCEPTION;
-            $this->msg = lswl_api_lang_messages_trans('sys_exception');
+            $this->msg = trans('sys_exception');
             Log::name(
                 config('lswl-api.exception.file_name.db_exception', 'handle.db_exception')
             )
@@ -251,7 +251,7 @@ class ExceptionHandler extends Handler
         ) {
             // 反射、逻辑、运行、绑定解析异常
             $this->code = ResultCodeInterface::SYS_EXCEPTION;
-            $this->msg = lswl_api_lang_messages_trans('sys_exception');
+            $this->msg = trans('sys_exception');
             Log::name(
                 config('lswl-api.exception.file_name.exception', 'handle.exception')
             )
@@ -264,7 +264,7 @@ class ExceptionHandler extends Handler
         } elseif ($e instanceof Error || $e instanceof ErrorException) {
             // 发生错误
             $this->code = ResultCodeInterface::SYS_ERROR;
-            $this->msg = lswl_api_lang_messages_trans('sys_error');
+            $this->msg = trans('sys_error');
             Log::name(
                 config('lswl-api.exception.file_name.error', 'handle.error')
             )

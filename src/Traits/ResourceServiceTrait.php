@@ -247,7 +247,7 @@ trait ResourceServiceTrait
             $this->storeDataFilter
         );
         if (empty($data)) {
-            $this->error(lswl_api_lang_messages_trans('save_data_no_exist'));
+            $this->error(trans('save_data_no_exist'));
         }
 
         // 保存
@@ -284,7 +284,7 @@ trait ResourceServiceTrait
 
         // 不存在主键
         if (!$this->params->id) {
-            $this->error(lswl_api_lang_messages_trans('update_model_no_exist'));
+            $this->error(trans('update_model_no_exist'));
         }
 
         // 查询
@@ -292,7 +292,7 @@ trait ResourceServiceTrait
         $info = $this->query
             ->where($primaryKey, $this->params->id)
             ->firstOr([$primaryKey], function () {
-                $this->error(lswl_api_lang_messages_trans('update_data_query_failed'));
+                $this->error(trans('update_data_query_failed'));
             });
 
         // 更新
@@ -403,7 +403,7 @@ trait ResourceServiceTrait
         // 简单验证id
         $ids = explode(',', $this->params->id);
         if (empty($ids)) {
-            $this->error(lswl_api_lang_messages_trans('destroy_data_no_exist'));
+            $this->error(trans('destroy_data_no_exist'));
         }
 
         return $ids;
@@ -418,7 +418,7 @@ trait ResourceServiceTrait
         // 模型
         $model = ParseModel::run($this->model, get_called_class(), 'service');
         if (!($model instanceof Model)) {
-            $this->error(lswl_api_lang_messages_trans('model_no_exist'));
+            $this->error(trans('model_no_exist'));
         }
 
         return $model->newQuery();

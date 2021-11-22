@@ -46,7 +46,7 @@ class CheckSdlMiddleware
 
         // 验证缓存
         if (!$cache->verify($request->userInfo->id, $token)) {
-            $this->error(lswl_api_lang_messages_trans('sdl'), ResultCodeInterface::SDL);
+            $this->error(trans('sdl'), ResultCodeInterface::SDL);
         }
 
         return $next($request);

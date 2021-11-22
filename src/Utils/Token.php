@@ -70,7 +70,7 @@ class Token
     {
         // 验证格式
         if (count($parse) != 3) {
-            return [ResultCodeInterface::TOKEN_INVALID, lswl_api_lang_messages_trans('token_invalid')];
+            return [ResultCodeInterface::TOKEN_INVALID, trans('token_invalid')];
         }
 
         // [加密字符, 加密时间, 加密场景]
@@ -78,13 +78,13 @@ class Token
 
         // 场景不同
         if ($parseScene != $scene) {
-            return [ResultCodeInterface::TOKEN_INVALID, lswl_api_lang_messages_trans('token_invalid')];
+            return [ResultCodeInterface::TOKEN_INVALID, trans('token_invalid')];
         }
 
         // 验证token是否有效
         $refreshTime = config('lswl-api.token.allow_refresh_time', 0);
         if (((int)$time + $refreshTime) < time()) {
-            return [ResultCodeInterface::TOKEN_EXPIRE, lswl_api_lang_messages_trans('token_expired')];
+            return [ResultCodeInterface::TOKEN_EXPIRE, trans('token_expired')];
         }
 
         return true;

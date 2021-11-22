@@ -41,7 +41,7 @@ class RequestLockMiddleware
 
         if (!$request->requestLock->get()) {
             $this->error(
-                lswl_api_lang_messages_trans('request_lock_prompt'),
+                trans('request_lock_prompt'),
                 ResultCodeInterface::REQUEST_LOCKED
             );
         }

@@ -132,7 +132,7 @@ class CheckSignatureMiddleware
             ->withDateToName()
             ->withMessageLineBreak()
             ->info($validateSign);
-        $this->error(lswl_api_lang_messages_trans('signature_verification_failed'));
+        $this->error(trans('signature_verification_failed'));
     }
 
     /**
@@ -177,12 +177,12 @@ class CheckSignatureMiddleware
 
         // 时间过大
         if ($timestamp > ($time + $timeout)) {
-            $this->error(lswl_api_lang_messages_trans('please_calibrate_the_time'));
+            $this->error(trans('please_calibrate_the_time'));
         }
 
         // 时间过小
         if (($timestamp + $timeout) < $time) {
-            $this->error(lswl_api_lang_messages_trans('request_expired'));
+            $this->error(trans('request_expired'));
         }
     }
 
@@ -196,12 +196,12 @@ class CheckSignatureMiddleware
     {
         // 验证是否存在
         if (empty($nonce)) {
-            $this->error(lswl_api_lang_messages_trans('request_random_number_no_exist'));
+            $this->error(trans('request_random_number_no_exist'));
         }
 
         // 验证是否在列表
         if (in_array($nonce, $this->getNonceCacheList($connection))) {
-            $this->error(lswl_api_lang_messages_trans('request_random_number_already_exist'));
+            $this->error(trans('request_random_number_already_exist'));
         }
     }
 
