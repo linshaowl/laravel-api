@@ -11,7 +11,6 @@ namespace Lswl\Api\Utils;
 
 use Illuminate\Http\Request;
 use Lswl\Api\Contracts\PlatformInfoInterface;
-use Lswl\Support\Utils\RequestInfo;
 
 /**
  * 请求平台
@@ -69,7 +68,7 @@ class RequestPlatform
      */
     public static function getRequestPlatform(Request $request, string $name = 'request_platform')
     {
-        $platform = RequestInfo::getParam($request, $name, '');
+        $platform = RequestParams::getParam($request, $name, '');
         if (empty($platform)) {
             $platform = $request->server('HTTP_USER_AGENT', '');
         }

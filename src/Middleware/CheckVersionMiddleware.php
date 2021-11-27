@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Lswl\Api\Contracts\ResultCodeInterface;
 use Lswl\Api\Contracts\VersionModelInterface;
 use Lswl\Api\Traits\ResultThrowTrait;
-use Lswl\Support\Utils\RequestInfo;
+use Lswl\Api\Utils\RequestParams;
 
 /**
  * 检测版本中间件
@@ -26,7 +26,7 @@ class CheckVersionMiddleware
     public function handle(Request $request, Closure $next)
     {
         // 当前版本
-        $version = RequestInfo::getParam($request, 'version', 0);
+        $version = RequestParams::getParam($request, 'version', 0);
 
         // 判断版本号是否存在
         if (empty($version)) {

@@ -330,7 +330,7 @@ trait ResourceServiceTrait
     protected function indexQuery(Builder $builder, array $params, array $columns)
     {
         // 获取连表查询合格的列
-        $columns = $this->query->getModel()->getQualifiedColumns($columns);
+        $columns = $builder->getModel()->getQualifiedColumns($columns);
 
         // 最大数量
         $maxNum = config('lswl-api.max_query_num', 1000);

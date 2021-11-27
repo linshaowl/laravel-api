@@ -36,4 +36,29 @@ class RequestParams
 
         return $params;
     }
+
+    /**
+     * 获取参数
+     * @param Request $request
+     * @param string $name
+     * @param null $default
+     * @param bool $isset
+     * @return mixed
+     */
+    public static function getParam(Request $request, string $name, $default = null, bool $isset = false)
+    {
+        $param = $request->header(ucwords(str_replace('_', '-', $name), '-'), $default);
+        $exists = $isset ? isset($param) : (!empty($param));
+        if ($exists) {
+            return $param;
+        }
+
+        $params = self::run($request);
+        $exists = $isset ? isset($params[$name]) : (!empty($params[$name]));
+        if ($exists) {
+            return $params[$name];
+        }
+
+        return $default;
+    }
 }

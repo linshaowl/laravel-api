@@ -9,7 +9,7 @@
 
 namespace Lswl\Api\Traits;
 
-use Lswl\Support\Utils\RequestInfo;
+use Lswl\Api\Utils\RequestParams;
 
 /**
  * 资源服务分页方法
@@ -67,7 +67,7 @@ trait ResourceServicePageTrait
      */
     private function handleBoolParam(string $prop, string $name)
     {
-        $param = RequestInfo::getParam(request(), $name, null, true);
+        $param = RequestParams::getParam(request(), $name, null, true);
         if (is_null($param)) {
             return;
         }

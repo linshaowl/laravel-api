@@ -12,7 +12,6 @@ namespace Lswl\Api\Utils;
 use Lswl\Api\Contracts\ConstAttributeInterface;
 use Lswl\Api\Contracts\ResultCodeInterface;
 use Lswl\Api\Utils\Cipher\Token as TokenCipher;
-use Lswl\Support\Utils\RequestInfo;
 
 /**
  * 令牌加密
@@ -28,7 +27,7 @@ class Token
     {
         $token = request()->bearerToken();
         if (empty($token)) {
-            $token = RequestInfo::getParam(request(), $name, '');
+            $token = RequestParams::getParam(request(), $name, '');
         }
 
         return $token;
