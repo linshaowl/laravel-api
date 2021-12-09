@@ -224,7 +224,9 @@ trait ResourceServiceTrait
     protected function showHandler()
     {
         // 获取连表查询合格的列
-        $columns = $this->query->getModel()->getQualifiedColumns($this->showColumns);
+        $columns = $this->query->getModel()->getQualifiedColumns(
+            $this->getFillable($this->showColumns)
+        );
 
         // 默认通过主键查询
         $this->showQueryResult = $this->query
@@ -296,10 +298,7 @@ trait ResourceServiceTrait
             });
 
         // 更新
-        foreach ($data as $k => $v) {
-            $info->{$k} = $v;
-        }
-        $info->save();
+        $info->fill($data)->save();
     }
 
     /**
@@ -315,9 +314,8 @@ trait ResourceServiceTrait
         $this->query
             ->whereIn($this->getQualifiedPrimaryKey(), $ids)
             ->get()
-            ->map(function (Model $model) {
-                $model->delete();
-            });
+            ->each
+            ->delete();
     }
 
     /**

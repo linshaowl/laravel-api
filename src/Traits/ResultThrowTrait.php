@@ -24,8 +24,11 @@ trait ResultThrowTrait
      * @param int $code
      * @throws ResultException
      */
-    protected function success($data = null, string $msg = '', int $code = ResultCodeInterface::SUCCESS)
-    {
+    protected function success(
+        $data = null,
+        string $msg = '',
+        int $code = ResultCodeInterface::SUCCESS
+    ) {
         $msg = !empty($msg) ? $msg : trans('success');
         $this->abort($code, $msg, $data);
     }
@@ -66,8 +69,12 @@ trait ResultThrowTrait
      * @param int $httpCode
      * @throws ResultException
      */
-    private function abort(int $code, string $msg, $data, int $httpCode = ResultCodeInterface::HTTP_SUCCESS_CODE)
-    {
+    private function abort(
+        int $code,
+        string $msg,
+        $data,
+        int $httpCode = ResultCodeInterface::HTTP_SUCCESS_CODE
+    ) {
         throw new ResultException($code, $msg, $data, $httpCode);
     }
 }

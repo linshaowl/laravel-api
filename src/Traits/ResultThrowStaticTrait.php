@@ -7,81 +7,74 @@
  * file that was distributed with this source code.
  */
 
-namespace Lswl\Api\Utils;
+namespace Lswl\Api\Traits;
 
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Response;
 use Lswl\Api\Contracts\ResultCodeInterface;
+use Lswl\Api\Exceptions\ResultException;
 
 /**
- * 返回结果辅助
+ * 抛出结果异常-静态
  */
-class ResultHelper
+trait ResultThrowStaticTrait
 {
     /**
-     * 返回成功
+     * 抛出成功异常
      * @param $data
      * @param string $msg
      * @param int $code
-     * @return Response|ResponseFactory
+     * @throws ResultException
      */
-    public static function success(
+    protected static function success(
         $data = null,
         string $msg = '',
         int $code = ResultCodeInterface::SUCCESS
     ) {
         $msg = !empty($msg) ? $msg : trans('success');
-        return static::response($code, $msg, $data);
+        static::abort($code, $msg, $data);
     }
 
     /**
-     * 返回失败
+     * 抛出失败异常
      * @param string $msg
      * @param int $code
      * @param $data
      * @param int $httpCode
-     * @return Response|ResponseFactory
+     * @throws ResultException
      */
-    public static function error(
+    protected static function error(
         string $msg,
         int $code = ResultCodeInterface::ERROR,
         $data = null,
         int $httpCode = ResultCodeInterface::HTTP_ERROR_CODE
     ) {
-        return static::response($code, $msg, $data, $httpCode);
+        static::abort($code, $msg, $data, $httpCode);
     }
 
     /**
-     * 返回无数据
+     * 抛出无数据异常
      * @param string $msg
-     * @return Response|ResponseFactory
+     * @throws ResultException
      */
-    public static function noData(string $msg = '')
+    protected static function noData(string $msg = '')
     {
         $msg = !empty($msg) ? $msg : trans('no_data');
-        return static::response(ResultCodeInterface::NO_DATA, $msg, null);
+        static::abort(ResultCodeInterface::NO_DATA, $msg, null);
     }
 
     /**
-     * 返回响应
+     * 抛出异常
      * @param int $code
      * @param string $msg
      * @param $data
      * @param int $httpCode
-     * @return Response|ResponseFactory
+     * @throws ResultException
      */
-    private static function response(
+    private static function abort(
         int $code,
         string $msg,
         $data,
         int $httpCode = ResultCodeInterface::HTTP_SUCCESS_CODE
     ) {
-        $response = [
-            'code' => $code,
-            'msg' => $msg,
-            'data' => $data,
-        ];
-
-        return response()->json($response, $httpCode, [], JSON_UNESCAPED_UNICODE);
+        throw new ResultException($code, $msg, $data, $httpCode);
     }
 }
