@@ -21,7 +21,7 @@ trait ResourceControllerTrait
         return $this->service->index();
     }
 
-    public function show(int $id)
+    public function show(string $id)
     {
         if (empty($this->params->id)) {
             $this->params->id = $id;
