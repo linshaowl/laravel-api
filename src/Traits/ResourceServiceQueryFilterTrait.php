@@ -54,6 +54,9 @@ trait ResourceServiceQueryFilterTrait
         // 添加查询条件
         foreach ($queryColumns as $operator => $columns) {
             foreach ($columns as $column) {
+                // 处理查询字段
+                [$column, $queryColumn] = $this->handlerQueryColumn($column);
+
                 // 参数不存在
                 if (!isset($this->params->{$column})) {
                     continue;
@@ -68,7 +71,7 @@ trait ResourceServiceQueryFilterTrait
                 $value = $this->handlerQueryColumnValue($operator, $column);
 
                 // 添加条件
-                $this->query->where($this->query->getModel()->getQualifiedColumn($column), $operator, $value);
+                $this->query->where($this->query->getModel()->getQualifiedColumn($queryColumn), $operator, $value);
             }
         }
     }
@@ -88,6 +91,31 @@ trait ResourceServiceQueryFilterTrait
                 'like' => $this->queryColumnsLike,
             ]
         );
+    }
+
+    /**
+     * 处理查询列
+     * @param string $column
+     * @return array [$column, $queryColumn]
+     */
+    private function handlerQueryColumn(string $column): array
+    {
+        // 查询列
+        $queryColumn = $column;
+
+        // JSON格式列处理
+        if (!empty(strpos($column, '->'))) {
+            $columns = explode('->', $column);
+            $column = array_shift($columns);
+        }
+
+        // 连表列处理
+        $pos = strpos($column, '.');
+        if (!empty($pos)) {
+            $column = substr($column, $pos + 1);
+        }
+
+        return [$column, $queryColumn];
     }
 
     /**
